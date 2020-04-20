@@ -50,6 +50,7 @@ app.post('/move', (request, response) => {
   var turn = data.turn; // Current game turn
   var boardSize = data.board.width; // Board size
   var possibleMoves = ['up', 'right', 'down', 'left']; // Index of possible moves.
+  var startPosition = "X: " + data.you.body + "Y: "
   
   // CREAT BOARD
   // Represent the board as a 2-dimensional array
@@ -200,7 +201,7 @@ app.post('/move', (request, response) => {
 
   // MOVE
   updateBoard( board, food, "food" );
-  console.log( findShortestPath( [data.you.y,data.you.x], board) );
+  console.log( startPosition );
 
   // Execute move
   var choice = Math.floor(Math.random() * possibleMoves.length);
