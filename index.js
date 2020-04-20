@@ -84,7 +84,7 @@ app.post('/move', (request, response) => {
 
   // PATHING LOGIC
 
-  var findShortestPath = function( startCoordinate, board ) {
+  var findShortestPath = function( startCoordinates, board ) {
       
     // Starting coordinates
     var posY = startCoordinates[0];
