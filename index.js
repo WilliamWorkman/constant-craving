@@ -201,15 +201,10 @@ app.post('/move', (request, response) => {
   console.log(findShortestPath([0,0], grid));
 
   // Execute move
-  previousMove = snakeMove;
+  snakeMove = 'right';
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
   return response.json({ move: snakeMove });
 })
-
-
-
-
-
 
 // END
 // This function is called when a game your snake was in ends.
