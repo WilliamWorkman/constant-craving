@@ -52,7 +52,7 @@ app.post('/move', (request, response) => {
   var possibleMoves = ['up', 'right', 'down', 'left']; // Index of possible moves.
   
   // CREAT BOARD
-  // Represent the grid as a 2-dimensional array
+  // Represent the board as a 2-dimensional array
   // i = Column, Y position
   // j = row, X position
   var board = [];
@@ -67,7 +67,10 @@ app.post('/move', (request, response) => {
 
   // Map Food
   var food = Object.values( data.board.food ); // Converts json food data to array.
-  // Map 
+  // Map Self
+  //var body = Object.values( data.you.body ); // Converts snake body location data to array.
+  // Map Snakes
+  //var snakes = Object.values( data.board.snakes.body ); // Converts opponent snakes body locations to array.
  
   // UPDATE BOARD
   // Takes boardToUpdate array and updates coordinate from updateArray with an update Value
@@ -99,14 +102,14 @@ app.post('/move', (request, response) => {
     // Initialize the queue with the start location already inside
     var queue = [location];
 
-    // Loop through the grid searching for food
+    // Loop through the board searching for food
     while (queue.length > 0) {
       // Take the first location off the queue
       var currentLocation = queue.shift();
 
       // Explore each direction
       for ( let i = 0; i < possibleMoves.length; i++ ) {
-        var newLocation = exploreInDirection( currentLocation, i, grid);
+        var newLocation = exploreInDirection( currentLocation, i, board);
         if (newLocation.status === 'food') {
           return newLocation.path;
         } else if (newLocation.status === 'valid') {
@@ -122,24 +125,24 @@ app.post('/move', (request, response) => {
 
   // Check Location Status
   // This function will check a location's status
-  // (a location is "valid" if it is on the grid, is not an "obstacle",
+  // (a location is "valid" if it is on the board, is not an "obstacle",
   // and has not yet been visited by our algorithm)
   // Returns "valid", "invalid", "blocked", or "food"
-  var locationStatus = function(location, grid) {
-    var gridSize = grid.length;
+  var locationStatus = function(location, board) {
+    var boardSize = board.length;
     var y = location.y;
     var x = location.x;
 
     if (location.x < 0 ||
-        location.x >= gridSize ||
+        location.x >= boardSize ||
         location.y < 0 ||
-        location.y >= gridSize) {
+        location.y >= boardSize) {
 
-      // location is not on the grid--return false
+      // location is not on the board--return false
       return 'invalid';
-    } else if (grid[y][x] === 'food') {
+    } else if (board[y][x] === 'food') {
       return 'food';
-    } else if (grid[y][x] !== 'empty') {
+    } else if (board[y][x] !== 'empty') {
       // location is either an obstacle or has been visited
       return 'blocked';
     } else {
@@ -147,10 +150,9 @@ app.post('/move', (request, response) => {
     }
   };
 
-
-  // Explores the grid from the given location in the given
+  // Explores the board from the given location in the given
   // direction
-  var exploreInDirection = function( currentLocation, direction, grid ) {
+  var exploreInDirection = function( currentLocation, direction, board ) {
     var newPath = currentLocation.path.slice();
     newPath.push(direction);
 
@@ -171,13 +173,13 @@ app.post('/move', (request, response) => {
         y: y,
         x: x,
         path: newPath,
-        status: 'Unknown'
+        status: 'unknown'
       };
-    newLocation.status = locationStatus(newLocation, grid);
+    newLocation.status = locationStatus(newLocation, board);
 
     // If this new location is valid, mark it as 'Visited'
-    if (newLocation.status === 'Valid') {
-      grid[newLocation.posY][newLocation.posX] = 'Visited';
+    if (newLocation.status === 'valid') {
+      board[newLocation.posY][newLocation.posX] = 'visited';
     }
 
     return newLocation;
@@ -196,9 +198,11 @@ app.post('/move', (request, response) => {
     }
   }
 
+  console.log(findShortestPath([0,0], board));
+
   // MOVE
-  //updateBoard( board, food, "food" );
-  //console.log(findShortestPath([0,0], grid));
+  updateBoard( board, food, "food" );
+  console.log(findShortestPath([0,0], board));
 
   // Execute move
   var choice = Math.floor(Math.random() * possibleMoves.length);
