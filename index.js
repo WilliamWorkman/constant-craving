@@ -22,7 +22,7 @@ app.use(poweredByHandler)
 // --- SNAKE LOGIC GOES BELOW THIS LINE ---
 
 // Variables 
-var snakeColor = '#FFB366;
+var snakeColor = '#FFB366';
 
 // START
 //  This function is called everytime your snake is entered into a game.
