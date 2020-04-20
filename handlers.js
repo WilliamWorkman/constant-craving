@@ -14,7 +14,7 @@ const fallbackHandler = (req, res, next) => {
   if (req.baseUrl === '') {
     res.status(200)
     // If you open your snake URL in a browser you should see this message.
-    return res.send(`Your Battlesnake is alive!`)
+    return res.send(`Here comes a new challenger!`)
   }
 
   // Short-circuit favicon requests
