@@ -1,59 +1,176 @@
-nodejs-starter
-==============
+# A simple [Battlesnake](http://play.battlesnake.com) written in Javascript for NodeJS.
 
-First attempt at a nodejs/ajax app.  It provides a web interface for editing a table within a MySQL database, and a summary page which allows aggregation of the data.
-As an added extra to show simple analysis, the app contains a knapsack solver...
+This is a basic implementation of the [Battlesnake API](https://docs.battlesnake.com/snake-api). It's a great starting point for anyone wanting to program their first Battlesnake using Javascript. It comes ready to deploy to [Heroku](https://heroku.com), although you can use other cloud providers if you'd like.
+
+### Technologies
+
+This Battlesnake uses [Javascript](https://www.javascript.com/), [NodeJS](https://nodejs.dev/), and [Heroku](https://heroku.com). You will also need [npm](https://docs.npmjs.com/getting-started/) to assist with Javascript dependency management. [Express4](http://expressjs.com/en/4x/api.html) is used for route management, the documentation provide information on handling incoming JSON params and building responses.
+
+### Prerequisites
+
+* [GitHub Account](https://github.com/) and [Git Command Line](https://www.atlassian.com/git/tutorials/install-git)
+* [Heroku Account](https://signup.heroku.com/) and [Heroku Command Line](https://devcenter.heroku.com/categories/command-line)
+* [Battlesnake Account](https://play.battlesnake.com)
 
 
-To start: `node app`
+
+## Deploying Your First Battlesnake
+
+1. [Fork this repo](https://github.com/BattlesnakeOfficial/starter-snake-node/fork) into your GitHub Account.
+
+2. [Clone your forked repo](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) into your local environment.
+    ```shell
+    git clone git@github.com:[YOUR-GITHUB-USERNAME]/starter-snake-node.git
+    ```
+
+3. [Create a new Heroku app](https://devcenter.heroku.com/articles/creating-apps) to run your Battlesnake.
+    ```shell
+    heroku create [YOUR-APP-NAME]
+    ```
+
+4. [Deploy your Battlesnake code to Heroku](https://devcenter.heroku.com/articles/git#deploying-code).
+    ```shell
+    git push heroku master
+    ```
+
+5. Open your new Heroku app in your browser.
+    ```shell
+    heroku open
+    ```
+    If everything was successful, you should see the following text:
+    ```
+    Your Battlesnake is alive!
+    ```
+
+6. Optionally, you can view your server logs using the [Heroku logs command](https://devcenter.heroku.com/articles/logging#log-retrieval) `heroku logs --tail`. The `--tail` option will show a live feed of your logs in real-time.
+
+**At this point your Battlesnake is live and ready to enter games!**
 
 
-Go to `http://localhost:3000/` to access the app
+## Registering Your Battlesnake and Creating Your First Game
+
+1. Log in to [play.battlesnake.com](https://play.battlesnake.com/login/).
+
+2. [Create a new Battlesnake](https://play.battlesnake.com/account/snakes/create/). Give it a name and complete the form using the URL for your Heroku app.
+
+3. Once your Battlesnake has been saved you can [create a new game](https://play.battlesnake.com/account/games/create/) and add your Battlesnake to it. Type your Battlesnake's name into the search field and click "Add" to add it to the game. Then click "Create Game" to start the game.
+
+4. You should see a brand new Battlesnake game with your Battlesnake in it! Yay! Press "Play" to start the game and watch how your Battlesnake behaves. By default your Battlesnake should move randomly around the board.
+
+5. Optionally, open your [Heroku logs](https://devcenter.heroku.com/articles/logging#log-retrieval) while the game is running to see your Battlesnake receiving API calls and responding with its moves.
+
+Repeat steps 3 and 4 every time you want to see how your Battlesnake behaves. It's common for Battlesnake developers to repeat these steps often as they make their Battlesnake smarter.
+
+**At this point you should have a registered Battlesnake and be able to create games!**
 
 
-To build an example database to play with:
 
-```sql
-CREATE DATABASE IF NOT EXISTS node;
-USE node;
+## Customizing Your Battlesnake
 
-CREATE TABLE IF NOT EXISTS plants (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  name varchar(32) NOT NULL,
-  weight float NOT NULL,
-  PRIMARY KEY (id)
-);
+Now you're ready to start customizing your Battlesnake and improving its algorithm.
 
-INSERT INTO plants (name, weight) VALUES
-        ("potato", 0.54),
-        ("potato", 0.51),
-        ("potato", 0.5),
-        ("potato", 0.38),
-        ("carrot", 0.21),
-        ("onion", 0.36),
-        ("onion", 0.31),
-        ("carrot", 0.23),
-        ("onion", 0.43),
-        ("potato", 0.46),
-        ("potato", 0.45),
-        ("potato", 0.46),
-        ("potato", 0.48),
-        ("watermelon", 3.12),
-        ("watermelon", 3.85),
-        ("carrot", 0.17);
+### Changing Appearance
 
-CREATE USER 'node'@'localhost' IDENTIFIED BY 'node-password';
-GRANT ALL ON node.* TO 'node'@'localhost';
+Locate the `/start` endepoint inside [index.js](index.js#L27). You should see a line that looks like this:
+```javascript
+  // Response data
+  const data = {
+    color: '#888888',
+    headType: "regular",
+    tailType: "regular"
+  }
 ```
 
-Remember to set database password in `models/db.js` if you changed it from `node-password`
+This function is called every time a new game starts. Your response determines what your Battlesnake will look like in that game. See [Customizing Your Battlesnake](https://docs.battlesnake.com/snake-customization) for how to customize your Battlesnake's appearance using these values.
+
+### Changing Behavior
+
+On every turn of each game your Battlesnake receives information about the game board and must decide its next move.
+
+Locate the `/move` endpoint inside [index.js](index.js#L43). You should see code that looks like this:
+```javascript
+  var data = request.body;
+  // Choose a random direction to move in
+  possible_moves = ["up", "down", "left", "right"]
+  var choice = Math.floor(Math.random() * possible_moves.length);
+  var snake_move = possible_moves[choice];
+
+  console.log("MOVE: " + snake_move);
+  return response.json({ move: snake_move })
+```
+
+Possible moves are "up", "down", "left", or "right". To start your Battlesnake will choose a move randomly. Your goal as a developer is to read information sent to you about the board (available in the `data` variable) and make an intelligent decision about where your Battlesnake should move next. 
+
+See the [Battlesnake Rules](https://docs.battlesnake.com/rules) for more information on playing the game, moving around the board, and improving your algorithm.
+
+### Updating Your Battlesnake
+
+After making changes, commit them using git and deploy your changes to Heroku.
+```shell
+git add .
+git commit -m "update my battlesnake's appearance"
+git push heroku master
+```
+
+Once Heroku has updated you can [create a new game](https://play.battlesnake.com/account/games/create/) with your Battlesnake to view your latest changes in action.
+
+**At this point you should feel comfortable making changes to your code and deploying those changes to Heroku!**
 
 
-TODO
-----
- - Fix sortByCol bug which occurs when clicking a column title
- - Make AJAX return XML/HTML fragments via jade.
- - Use AJAX for change of page / page size instead of reloading the page.
- - Make AJAX edits/additions return page number of edited/added item so we can go to that page (via AJAX again).
- - Make the column CSS better, so they have sensible, deterministic sizes (try Chrome to see the ugliness)
- - Makbe use Stylus to do the previous bit of styling, might as well learn it?
+
+## Developing Your Battlesnake Further
+
+Now you have everything you need to start making your Battlesnake super smart! Here are a few more helpful tips:
+
+* Keeping your logs open in a second window (using `heroku logs --tail`) is helpful for watching server activity and debugging any problems with your Battlesnake.
+
+* You can use the Javascript [console.log](https://nodejs.org/api/console.html) to output information to your server logs. This is very useful for debugging logic in your code during Battlesnake games.
+
+* Review the [Battlesnake API Docs](https://docs.battlesnake.com/snake-api) to learn what information is provided with each command. You can also output the data to your logs:
+```javascript
+app.post('/move', (request, response) => {
+  var data = request.body;
+  console.log("Data: %s", data);
+  return response.json({ move: "up" })
+}
+```
+
+* When viewing a Battlesnake game you can pause playback and step forward/backward one frame at a time. If you review your logs at the same time, you can see what decision your Battlesnake made on each turn.
+
+
+
+## Joining a Battlesnake Arena
+
+Once you've made your Battlesnake behave and survive on its own, you can enter it into the [Global Battlesnake Arena](https://play.battlesnake.com/arena/global) to see how it performs against other Battlesnakes worldwide.
+
+Arenas will regularly create new games and rank Battlesnakes based on their results. They're a good way to get regular feedback on how well your Battlesnake is performing, and a fun way to track your progress as you develop your algorithm.
+
+
+
+## (Optional) Running Your Battlesnake Locally
+
+Eventually you might want to run your Battlesnake server locally for faster testing and debugging. You can do this by installing [NodeJS](https://nodejs.dev/) and [npm](https://docs.npmjs.com/getting-started/). 
+
+Once installed, run this to install all of the client dependencies.
+
+```shell
+npm install
+```
+
+Than run the server:
+
+```shell
+npm start
+```
+
+**Note:** You cannot create games on [play.battlesnake.com](https://play.battlesnake.com) using a locally running Battlesnake unless you install and use a port forwarding tool like [ngrok](https://ngrok.com/).
+
+
+---
+
+
+### Questions?
+
+All documentation is available at [docs.battlesnake.com](https://docs.battlesnake.com), including detailed Guides, API References, and Tips.
+
+You can also join the [Battlesnake Developer Community on Slack](https://play.battlesnake.com/slack). We have a growing community of Battlesnake developers of all skill levels wanting to help everyone succeed and have fun with Battlesnake :)
