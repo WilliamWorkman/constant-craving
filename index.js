@@ -84,11 +84,11 @@ app.post('/move', (request, response) => {
 
   // PATHING LOGIC
 
-  var findShortestPath = function() {
+  var findShortestPath = function( startCoordinate, board ) {
       
     // Starting coordinates
-    var posY = data.you.y;
-    var posX = data.you.x;
+    var posY = startCoordinates[0];
+    var posX = startCoordinates[1];
 
     // Each "location" will store its coordinates
     // and the shortest path required to arrive there
@@ -200,7 +200,7 @@ app.post('/move', (request, response) => {
 
   // MOVE
   updateBoard( board, food, "food" );
-  //console.log(findShortestPath([0,0], board));
+  console.log( findShortestPath( [data.you.y,data.you.x], board) );
 
   // Execute move
   var choice = Math.floor(Math.random() * possibleMoves.length);
