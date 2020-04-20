@@ -198,11 +198,9 @@ app.post('/move', (request, response) => {
     }
   }
 
-  console.log(findShortestPath([0,0], board));
-
   // MOVE
   updateBoard( board, food, "food" );
-  console.log(findShortestPath([0,0], board));
+  //console.log(findShortestPath([0,0], board));
 
   // Execute move
   var choice = Math.floor(Math.random() * possibleMoves.length);
