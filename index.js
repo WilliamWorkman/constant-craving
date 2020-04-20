@@ -197,11 +197,12 @@ app.post('/move', (request, response) => {
   }
 
   // MOVE
-  updateBoard( board, food, "food" );
-  console.log(findShortestPath([0,0], grid));
+  //updateBoard( board, food, "food" );
+  //console.log(findShortestPath([0,0], grid));
 
   // Execute move
-  snakeMove = 'right';
+  var choice = Math.floor(Math.random() * possibleMoves.length);
+  var snakeMove = possibleMoves[choice];
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
   return response.json({ move: snakeMove });
 })
