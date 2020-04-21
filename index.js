@@ -92,7 +92,6 @@ app.post('/move', (request, response) => {
 
   // Find Shortest Path
   var findShortestPath = function() {
-    console.log( "findShortestPath Begin");
     // Starting coordinates
     var posY = getValue( data.you.body, 0, 1 );
     var posX = getValue( data.you.body, 0, 0 );
@@ -125,7 +124,6 @@ app.post('/move', (request, response) => {
       }
     }
 
-    console.log( "findShortestPath Finished" );
     // No valid path found
     return false;
 
@@ -208,11 +206,10 @@ app.post('/move', (request, response) => {
 
   // MOVE
   updateBoard( board, food, "food" );
-  console.log( findShortestPath() );
+  var path = Array( findShortestPath() );
 
   // Execute move
-  var choice = Math.floor(Math.random() * possibleMoves.length);
-  var snakeMove = possibleMoves[choice];
+  var snakeMove = path[0];
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
   return response.json({ move: snakeMove });
 })
