@@ -46,7 +46,6 @@ app.post('/start', (request, response) => {
 // Valid moves are "up", "down", "left", or "right".
 // TODO: Use the information in cherrypy.request.json to decide your next move.
 app.post('/move', (request, response) => {
-  console.log( "Begin" );
   var data = request.body; // Game data from JASON payload.
   var turn = data.turn; // Current game turn
   var boardSize = data.board.width; // Board size
@@ -63,16 +62,13 @@ app.post('/move', (request, response) => {
           board[i][j] = 'empty';
       }
   }
-  console.log( "Board Created" );
   
   // MAP OBJECTS
 
   // Map Food
   var food = Object.values( data.board.food ); // Converts json food data to array.
-  console.log( "Food Mapped" );
   // Map Self
   var body = Object.values( data.you.body ); // Converts snake body location data to array.
-  console.log( "Body Mapped" );
   // Map Snakes
   //var snakes = Object.values( data.board.snakes.body ); // Converts opponent snakes body locations to array.
  
@@ -86,13 +82,11 @@ app.post('/move', (request, response) => {
     }
     var boardString = String(boardToUpdate);
     var updateString = String(updateArray);
-    console.log( boardString + " Updated with " + updateString );
   }
   // PATHING LOGIC
 
-  var findShortestPath = function( startCoordinates, board ) {
+  var findShortestPath = function() {
 
-    console.log( "Begin findShortestPath" );  
     // Starting coordinates
     var posY = startCoordinates[0];
     var posX = startCoordinates[1];
@@ -211,12 +205,10 @@ app.post('/move', (request, response) => {
   }
 
   // MOVE
-  console.log( "Login Start updateBoard" );
   updateBoard( board, food, "food" );
-  console.log( "Logic Done updateBoard" );
+
 
   // Execute move
-  console.log( "Logic Start Execute Move" );
   var choice = Math.floor(Math.random() * possibleMoves.length);
   var snakeMove = possibleMoves[choice];
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
