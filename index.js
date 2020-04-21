@@ -92,7 +92,7 @@ app.post('/move', (request, response) => {
 
   // Find Shortest Path
   var findShortestPath = function() {
-
+    console.log( "findShortestPath Begin");
     // Starting coordinates
     var posY = getValue( data.you.body, 0, 1 );
     var posX = getValue( data.you.body, 0, 0 );
@@ -137,13 +137,9 @@ app.post('/move', (request, response) => {
   // and has not yet been visited by our algorithm)
   // Returns "valid", "invalid", "blocked", or "food"
   var locationStatus = function(location, board) {
-    console.log( "Begin locationStatus" );
     var boardSize = board.length;
     var y = location.y;
     var x = location.x;
-    console.log ( location.y );
-    console.log ( location.x );
-    console.log ( location.status );
 
     if (location.x < 0 ||
         location.x >= boardSize ||
@@ -165,7 +161,6 @@ app.post('/move', (request, response) => {
   // Explores the board from the given location in the given
   // direction
   var exploreInDirection = function( currentLocation, direction, board ) {
-    console.log( "Begin exploreInDirection" );
     var newPath = currentLocation.path.slice();
     newPath.push(direction);
 
@@ -195,13 +190,11 @@ app.post('/move', (request, response) => {
       board[newLocation.y][newLocation.x] = 'visited';
     }
 
-    console.log( "exploreInDirection Finished" );
     return newLocation;
   };
 
   // Returns a direction based on passed X and Y coordinates
   var getDirection = function( x, y ) {
-      console.log( "Begin getDirection" );
       if ( y < data.you.y && x == data.you.x ) {
         return "up"
       } else if ( x > data.you.x && y == data.you.y ) {
