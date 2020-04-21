@@ -151,13 +151,17 @@ app.post('/move', (request, response) => {
         location.y >= boardSize) {
 
       // location is not on the board--return false
+      console.log('invalid');
       return 'invalid';
     } else if (board[y][x] === 'food') {
+      console.log('food');
       return 'food';
     } else if (board[y][x] !== 'empty') {
       // location is either an obstacle or has been visited
+      console.log('blocked');
       return 'blocked';
     } else {
+      console.log('valid');
       return 'valid';
     }
   };
