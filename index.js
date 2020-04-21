@@ -207,9 +207,10 @@ app.post('/move', (request, response) => {
   // MOVE
   updateBoard( board, food, "food" );
   var path = Array( findShortestPath() );
+  console.log( path );
 
   // Execute move
-  var snakeMove = path[0];
+  var snakeMove = 'up';
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
   return response.json({ move: snakeMove });
 })
