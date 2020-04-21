@@ -141,6 +141,9 @@ app.post('/move', (request, response) => {
     var boardSize = board.length;
     var y = location.y;
     var x = location.x;
+    console.log ( location.y );
+    console.log ( logation.x );
+    console.log ( location.status );
 
     if (location.x < 0 ||
         location.x >= boardSize ||
