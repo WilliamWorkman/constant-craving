@@ -46,12 +46,12 @@ app.post('/start', (request, response) => {
 // Valid moves are "up", "down", "left", or "right".
 // TODO: Use the information in cherrypy.request.json to decide your next move.
 app.post('/move', (request, response) => {
+  console.log( "Begin" );
   var data = request.body; // Game data from JASON payload.
   var turn = data.turn; // Current game turn
   var boardSize = data.board.width; // Board size
   var possibleMoves = ['up', 'right', 'down', 'left']; // Index of possible moves.
-  var startPosition = "X: " + data.you.body.x + "Y: " + data.you.body.y
-  
+
   // CREAT BOARD
   // Represent the board as a 2-dimensional array
   // i = Column, Y position
@@ -63,13 +63,16 @@ app.post('/move', (request, response) => {
           board[i][j] = 'empty';
       }
   }
+  console.log( "Board Created" );
   
   // MAP OBJECTS
 
   // Map Food
   var food = Object.values( data.board.food ); // Converts json food data to array.
+  console.log( "Food Mapped" );
   // Map Self
-  //var body = Object.values( data.you.body ); // Converts snake body location data to array.
+  var body = Object.values( data.you.body ); // Converts snake body location data to array.
+  console.log( "Body Mapped" );
   // Map Snakes
   //var snakes = Object.values( data.board.snakes.body ); // Converts opponent snakes body locations to array.
  
@@ -81,12 +84,13 @@ app.post('/move', (request, response) => {
       var updateArrayIndex = Object.values(updateArray[i]);
       boardToUpdate[ (updateArrayIndex[0]) ][ (updateArrayIndex[1]) ] = updateValue;
     }
+    console.log( boardToUpdate + " Updated with " + updateArray );
   }
-
   // PATHING LOGIC
 
   var findShortestPath = function( startCoordinates, board ) {
-      
+
+    console.log( "Begin findShortestPath" );  
     // Starting coordinates
     var posY = startCoordinates[0];
     var posX = startCoordinates[1];
@@ -119,6 +123,7 @@ app.post('/move', (request, response) => {
       }
     }
 
+    console.log( "findShortestPath Finished" );
     // No valid path found
     return false;
 
@@ -130,6 +135,7 @@ app.post('/move', (request, response) => {
   // and has not yet been visited by our algorithm)
   // Returns "valid", "invalid", "blocked", or "food"
   var locationStatus = function(location, board) {
+    console.log( "Begin locationStatus" );
     var boardSize = board.length;
     var y = location.y;
     var x = location.x;
@@ -154,6 +160,7 @@ app.post('/move', (request, response) => {
   // Explores the board from the given location in the given
   // direction
   var exploreInDirection = function( currentLocation, direction, board ) {
+    console.log( "Begin exploreInDirection" );
     var newPath = currentLocation.path.slice();
     newPath.push(direction);
 
@@ -183,11 +190,13 @@ app.post('/move', (request, response) => {
       board[newLocation.posY][newLocation.posX] = 'visited';
     }
 
+    console.log( "exploreInDirection Finished" );
     return newLocation;
   };
 
   // Returns a direction based on passed X and Y coordinates
   var getDirection = function( x, y ) {
+      console.log( "Begin getDirection" );
       if ( y < data.you.y && x == data.you.x ) {
         return "up"
       } else if ( x > data.you.x && y == data.you.y ) {
@@ -200,10 +209,12 @@ app.post('/move', (request, response) => {
   }
 
   // MOVE
+  console.log( "Login Start updateBoard" );
   updateBoard( board, food, "food" );
-  console.log( startPosition );
+  console.log( "Logic Done updateBoard" );
 
   // Execute move
+  console.log( "Logic Start Execute Move" );
   var choice = Math.floor(Math.random() * possibleMoves.length);
   var snakeMove = possibleMoves[choice];
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
