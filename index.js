@@ -208,7 +208,7 @@ app.post('/move', (request, response) => {
   updateBoard( board, food, "food" );
   var path = Array( findShortestPath() );
   console.log( path );
-  console.log( "Next Move: " + path[0] );
+  console.log( "Next Move: " + path[0][0] );
 
   // Execute move
   var snakeMove = 'up';
