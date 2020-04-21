@@ -210,7 +210,7 @@ app.post('/move', (request, response) => {
   var path = Array( findShortestPath() );
 
   // Execute move
-  var snakeMove = path[0][0];
+  var snakeMove = path[0][turn];
   console.log( 'MOVE ' + (turn+1) + ': ' + snakeMove );
   return response.json({ move: snakeMove });
 })
