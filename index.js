@@ -84,7 +84,9 @@ app.post('/move', (request, response) => {
       var updateArrayIndex = Object.values(updateArray[i]);
       boardToUpdate[ (updateArrayIndex[0]) ][ (updateArrayIndex[1]) ] = updateValue;
     }
-    console.log( boardToUpdate + " Updated with " + updateArray );
+    var boardString = String(boardToUpdate);
+    var updateString = String(updateArray);
+    console.log( boardString + " Updated with " + updateString );
   }
   // PATHING LOGIC
 
