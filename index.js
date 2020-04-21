@@ -205,7 +205,8 @@ app.post('/move', (request, response) => {
   }
 
   // MOVE
-  updateBoard( board, food, "food" );
+  updateBoard( board, food, 'food' ); // Add Food to board
+  updateBoard( board, body, 'body' ); // Add own body to board
   var path = Array( findShortestPath() );
 
   // Execute move
