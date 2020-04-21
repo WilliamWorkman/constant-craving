@@ -142,7 +142,7 @@ app.post('/move', (request, response) => {
     var y = location.y;
     var x = location.x;
     console.log ( location.y );
-    console.log ( logation.x );
+    console.log ( location.x );
     console.log ( location.status );
 
     if (location.x < 0 ||
