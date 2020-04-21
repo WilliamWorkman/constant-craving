@@ -87,8 +87,6 @@ app.post('/move', (request, response) => {
       var updateArrayIndex = Object.values(updateArray[i]);
       boardToUpdate[ (updateArrayIndex[0]) ][ (updateArrayIndex[1]) ] = updateValue;
     }
-    var boardString = String(boardToUpdate);
-    var updateString = String(updateArray);
   }
   // PATHING LOGIC
 
@@ -118,7 +116,7 @@ app.post('/move', (request, response) => {
 
       // Explore each direction
       for ( let i = 0; i < possibleMoves.length; i++ ) {
-        var newLocation = exploreInDirection( currentLocation, i, board);
+        var newLocation = exploreInDirection( currentLocation, possibleMoves[i], board);
         if (newLocation.status === 'food') {
           return newLocation.path;
         } else if (newLocation.status === 'valid') {
@@ -168,16 +166,16 @@ app.post('/move', (request, response) => {
     var newPath = currentLocation.path.slice();
     newPath.push(direction);
 
-    var y = currentLocation.posY;
-    var x = currentLocation.posX;
+    var y = currentLocation.y;
+    var x = currentLocation.x;
 
-    if (direction === "up" ) {
+    if (direction === 'up' ) {
       y -= 1;
-    } else if (direction === "right" ) {
+    } else if (direction === 'right' ) {
       x += 1;
-    } else if (direction === "down" ) {
+    } else if (direction === 'down' ) {
       y += 1;
-    } else if (direction === "left" ) {
+    } else if (direction === 'left' ) {
       x -= 1;
     }
 
